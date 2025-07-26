@@ -16,10 +16,8 @@ export default function Home() {
       <Navbar />
       <section className="main-section py-16 text-center">
         <div className="page-heading max-w-3xl mx-auto">
-          <h1 className="text-4xl font-bold mb-4">Welcome to ResuMagic</h1>
-          <h2 className="text-lg text-gray-600">
-            Your one-stop solution for resume building
-          </h2>
+          <h1 className="text-4xl font-bold mb-4">  Your Dream Job Starts with a Killer Resume </h1>
+          <h2 className="text-lg text-gray-600">Effortlessly track, manage, and level up your applications in one place.</h2>
         </div>
       </section>
       {resumes.length > 0 && (
