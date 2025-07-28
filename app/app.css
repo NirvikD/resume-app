@@ -20,7 +20,7 @@
 
 html,
 body {
-  @apply bg-white;
+  @apply bg-white min-h-screen; /* ADDED min-h-screen here */
 }
 
 main {
