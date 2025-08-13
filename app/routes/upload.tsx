@@ -4,13 +4,12 @@ import { useState } from 'react';
 import FileUploader from '~/components/FileUploader';
 import { usePuterStore } from '~/lib/puter';
 import { useNavigate } from 'react-router';
-import { s } from 'node_modules/react-router/dist/development/components-CjQijYga.mjs';
 import { convertPdfToImage } from '~/lib/pdf2img';
 import { generateUUID } from '~/lib/utils';
 import { prepareInstructions,AIResponseFormat } from 'constants/index';
 
 const upload = () => {
-  const {auth, isLoading, fs ,ai, kv} = usePuterStore();
+  const { auth, isLoading, fs, ai, kv } = usePuterStore();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [statusText, setStatusText] = useState('Upload your resume to get started!');
@@ -69,8 +68,15 @@ const upload = () => {
       return setStatusText('Failed to analyze the resume. Please try again.');
     }
 
-
+    const feedbackText = typeof feedback.message.content ==='string'
+      ? feedback.message.content
+      : feedback.message.content[0].text;
+    data.feedback = JSON.parse(feedbackText);
+    await kv.set(`resume:${uuid}`, JSON.stringify(data));
+    setStatusText('Analysis complete! Redirecting to results...');
+    console.log(data);
   };
+
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
