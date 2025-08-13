@@ -5,6 +5,7 @@ import FileUploader from '~/components/FileUploader';
 import { usePuterStore } from '~/lib/puter';
 import { useNavigate } from 'react-router';
 import { s } from 'node_modules/react-router/dist/development/components-CjQijYga.mjs';
+import { convertPdfToImage } from '~/lib/pdf2img';
 
 const upload = () => {
   const {auth, isLoading, fs ,ai, kv} = usePuterStore();
@@ -30,7 +31,17 @@ const upload = () => {
       return setStatusText('Failed to upload the file. Please try again.');
     }
     setStatusText('Converting to image...');
-    //const imageFile = await convertPdfToImage(file);
+    const imageFile = await convertPdfToImage(file);
+    if(!imageFile.file) {
+      return setStatusText('Failed to convert PDF to image.');
+    }
+    setStatusText('Uploading the image')
+    const uploadedImage = await fs.upload([imageFile.file]);
+    if (!uploadedImage) {
+      return setStatusText('Failed to upload the image.');
+    }
+    setStatusText('Preparing data...');
+    
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
