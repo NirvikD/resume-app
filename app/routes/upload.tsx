@@ -52,6 +52,8 @@ const upload = () => {
       jobDescription,
       feedback: '',
     }
+    await kv.set(`resume:${uuid}`, JSON.stringify(data));
+    setStatusText('Analyzing resume...');
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
