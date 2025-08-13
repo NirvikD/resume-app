@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router';
 import { s } from 'node_modules/react-router/dist/development/components-CjQijYga.mjs';
 import { convertPdfToImage } from '~/lib/pdf2img';
 import { generateUUID } from '~/lib/utils';
+import { prepareInstructions,AIResponseFormat } from 'constants/index';
 
 const upload = () => {
   const {auth, isLoading, fs ,ai, kv} = usePuterStore();
@@ -54,6 +55,21 @@ const upload = () => {
     }
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
     setStatusText('Analyzing resume...');
+
+    const feedback = await ai.feedback(
+      uploadedFile.path, 
+      prepareInstructions({
+        jobTitle,
+        jobDescription,
+        AIResponseFormat
+      })
+    );
+
+    if (!feedback) {
+      return setStatusText('Failed to analyze the resume. Please try again.');
+    }
+
+
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
