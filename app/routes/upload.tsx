@@ -6,6 +6,7 @@ import { usePuterStore } from '~/lib/puter';
 import { useNavigate } from 'react-router';
 import { s } from 'node_modules/react-router/dist/development/components-CjQijYga.mjs';
 import { convertPdfToImage } from '~/lib/pdf2img';
+import { generateUUID } from '~/lib/utils';
 
 const upload = () => {
   const {auth, isLoading, fs ,ai, kv} = usePuterStore();
@@ -41,7 +42,16 @@ const upload = () => {
       return setStatusText('Failed to upload the image.');
     }
     setStatusText('Preparing data...');
-    
+    const uuid = generateUUID();
+    const data = {
+      id: uuid,
+      resumePath: uploadedFile.path,
+      imagePath: uploadedImage.path,
+      companyName,
+      jobTitle,
+      jobDescription,
+      feedback: '',
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
